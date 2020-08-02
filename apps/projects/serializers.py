@@ -16,7 +16,7 @@ from rest_framework import validators
 
 from .models import Projects
 from interfaces.models import Interfaces
-from interfaces.serializers import InterfacesModelSerializer
+from apps.interfaces.serializers import InterfacesModelSerializer
 from utils import common
 
 
@@ -36,15 +36,10 @@ class ProjectsModelSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'create_time': {
                 'read_only': False,
-                'format': common.datetime_fmt(),
+                # 'format': common.datetime_fmt(),
             },
 
         }
-
-    # def create(self, validated_data):
-        # email = validated_data.pop('email')
-        # return super().create(validated_data)
-        # return Projects.objects.create(**validated_data)
 
 
 class ProjectsNamesModelSerializer(serializers.ModelSerializer):

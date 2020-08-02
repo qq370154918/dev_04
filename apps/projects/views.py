@@ -9,9 +9,12 @@ from rest_framework.filters import OrderingFilter
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework import permissions
+from rest_framework.response import Response
 
 from .models import Projects
 from interfaces.models import Interfaces
+from testsuits.models import Testsuits
+
 from .serializers import ProjectsModelSerializer, ProjectsNamesModelSerializer, \
     InterfacesByProjectIdModelSerializer, InterfacesByProjectIdModelSerializer1
 
@@ -58,15 +61,34 @@ class ProjectsViewSet(viewsets.ModelViewSet):
             # b.使用.annotate()方法里可以添加聚合函数，计算的名称为一般从表模型类名小写（还需要在外键字段上设置related_name）
             # c.values可以指定需要查询的字段（默认为所用字段）
             # d.可以给聚合函数指定别名，默认为testcases__count
-            interfaces_obj = Interfaces.objects.annotate(testcases=Count('testcases')).values('id', 'testcases').\
+            interfaces_obj = Interfaces.objects.annotate(testcases1=Count('testcases')).values('id', 'testcases1').\
                 filter(project_id=project_id)
+            item["interfaces"]=len(interfaces_obj)
+            testcases=0
+            for i in interfaces_obj:
+                testcases += i['testcases1']
+            item["testcases"] = testcases
+            testsuits =Testsuits.objects.filter(project_id=project_id).count()
+            item["testsuits"] = testsuits
+            # interfaces_configures = Interfaces.objects.annotate(configures1=Count('configures')).values('id','configures'). \
+            #     filter(project_id=project_id)
+            interfaces_configures = Interfaces.objects.annotate(configures1=Count('configures')).values('configures1'). \
+                filter(project_id=project_id)
+            configures=0
+            for i in interfaces_configures:
+                configures += i['configures1']
+            item["configures"] = configures
+        return response
 
-            Interfaces.objects.annotate(Count('testcases'))
-        pass
+    #重新删除方法，做逻辑删除
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=['get'], detail=False)
     def names(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+        return super().list(request, *args, **kwargs)
 
     @action(detail=True)
     def interfaces(self, request, *args, **kwargs):

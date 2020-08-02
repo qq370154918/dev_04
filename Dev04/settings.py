@@ -131,11 +131,12 @@ DATABASES = {
         # 指定数据库的名称
         'NAME': 'dev04_dj',
         # 指定连接的数据库主机地址，域名和ip都可以
-        'HOST': 'localhost',
+        'HOST' : '47.107.186.205',
+        # 'HOST' : 'localhost',
         # 指定数据库的连接端口号，默认为3306,
-        'PORT': 13306,
-        'USER': 'root',
-        'PASSWORD': 'pythonvip',
+        'PORT' : '3306',
+        'USER' : 'root',
+        'PASSWORD' : '123456'
     }
 }
 

@@ -14,7 +14,7 @@
 from rest_framework import serializers
 from rest_framework import validators
 
-from .models import Interfaces
+from interfaces.models import Interfaces
 from projects.models import Projects
 # from projects.serializers import ProjectsModelSerializer
 
