@@ -1,16 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
--------------------------------------------------
-  @Time : 2020/7/15 21:06 
-  @Auth : 可优
-  @File : pagination.py
-  @IDE  : PyCharm
-  @Motto: ABC(Always Be Coding)
-  @Email: keyou100@qq.com
-  @Company: 湖南省零檬信息技术有限公司
-  @Copyright: 柠檬班
--------------------------------------------------
-"""
+
 from collections import OrderedDict
 
 from rest_framework.pagination import PageNumberPagination
@@ -37,15 +26,4 @@ class MyPagination(PageNumberPagination):
         response.data['current_page_num'] = self.page.number
         response.data['total_pages'] = self.page.paginator.num_pages
 
-        # current_page_num = self.page.number
-        # total_pages = self.page.paginator.num_pages
-        #
-        # return Response(OrderedDict([
-        #     ('count', self.page.paginator.count),
-        #     ('next', self.get_next_link()),
-        #     ('previous', self.get_previous_link()),
-        #     ('results', data),
-        #     ('current_page_num', current_page_num),
-        #     ('total_pages', total_pages)
-        # ]))
         return response
