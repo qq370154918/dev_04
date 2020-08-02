@@ -1,0 +1,24 @@
+[[source]]
+name = "pypi"
+#url = "https://pypi.org/simple"
+url = "https://pypi.douban.com/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+django = "*"
+mysqlclient = "*"
+djangorestframework = "*"
+ipython = "*"
+djangorestframework-yaml = "*"
+coreapi = "*"
+pygments = "*"
+markdown = "*"
+drf-yasg = "*"
+pyjwt = "*"
+djangorestframework-jwt = "*"
+django-cors-headers = "*"
+
+[requires]
+python_version = "3.8"
