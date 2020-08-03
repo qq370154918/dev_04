@@ -13,7 +13,8 @@ class InterfacesNamesModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Interfaces
-        fields = ('id', 'name')
+        # fields = ('id', 'name',)
+        fields = "__all__"
 
 
 class ProjectsModelSerializer(serializers.ModelSerializer):
@@ -25,7 +26,7 @@ class ProjectsModelSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'create_time': {
                 'read_only': False,
-                # 'format': common.datetime_fmt(),
+                'format': common.datetime_fmt(),
             },
 
         }

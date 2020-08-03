@@ -63,28 +63,30 @@ class ProjectsViewSet(viewsets.ModelViewSet):
             # d.可以给聚合函数指定别名，默认为testcases__count
             interfaces_obj = Interfaces.objects.annotate(testcases1=Count('testcases')).values('id', 'testcases1').\
                 filter(project_id=project_id)
+            #当前项目的接口数
             item["interfaces"]=len(interfaces_obj)
             testcases=0
             for i in interfaces_obj:
                 testcases += i['testcases1']
+            #当前项目的用例总数
             item["testcases"] = testcases
             testsuits =Testsuits.objects.filter(project_id=project_id).count()
+            #当前项目的套件总数
             item["testsuits"] = testsuits
-            # interfaces_configures = Interfaces.objects.annotate(configures1=Count('configures')).values('id','configures'). \
-            #     filter(project_id=project_id)
             interfaces_configures = Interfaces.objects.annotate(configures1=Count('configures')).values('configures1'). \
                 filter(project_id=project_id)
             configures=0
             for i in interfaces_configures:
                 configures += i['configures1']
+            #当前项目的配置总数
             item["configures"] = configures
         return response
 
     #重新删除方法，做逻辑删除
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    # def destroy(self, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #     self.perform_destroy(instance)
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=['get'], detail=False)
     def names(self, request, *args, **kwargs):
@@ -92,17 +94,14 @@ class ProjectsViewSet(viewsets.ModelViewSet):
 
     @action(detail=True)
     def interfaces(self, request, *args, **kwargs):
-        instance = self.get_object()
-        qs = Interfaces.objects.filter(projects=instance)
-        serializer_obj = self.get_serializer(instance=instance)
-        # 进行过滤和分页操作
+        interfaces = self.get_object()
+        serializer_obj = self.get_serializer(instance=interfaces)
         return Response(serializer_obj.data)
 
     def get_serializer_class(self):
         if self.action == 'names':
             return ProjectsNamesModelSerializer
         elif self.action == 'interfaces':
-            # return InterfacesByProjectIdModelSerializer
-            return InterfacesByProjectIdModelSerializer1
+            return InterfacesByProjectIdModelSerializer
         else:
             return self.serializer_class
