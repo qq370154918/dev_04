@@ -80,15 +80,12 @@ class ProjectsViewSet(viewsets.ModelViewSet):
             item["configures"] = configures
         return response
 
-    #重新删除方法，做逻辑删除
-    # def destroy(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #     self.perform_destroy(instance)
-    #     return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=['get'], detail=False)
     def names(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     @action(detail=True)
     def interfaces(self, request, *args, **kwargs):

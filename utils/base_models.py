@@ -11,3 +11,4 @@ class BaseModel(models.Model):
     class Meta:
         # 指定在迁移时不创建表
         abstract = True
+

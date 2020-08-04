@@ -26,7 +26,7 @@ class ProjectsModelSerializer(serializers.ModelSerializer):
 
         extra_kwargs = {
             'create_time': {
-                'read_only': False,
+                'read_only': True,
                 'format': common.datetime_fmt(),
             },
 
