@@ -61,23 +61,21 @@ class ProjectsViewSet(viewsets.ModelViewSet):
             # b.使用.annotate()方法里可以添加聚合函数，计算的名称为一般从表模型类名小写（还需要在外键字段上设置related_name）
             # c.values可以指定需要查询的字段（默认为所用字段）
             # d.可以给聚合函数指定别名，默认为testcases__count
-            interfaces_obj = Interfaces.objects.annotate(testcases1=Count('testcases')).values('id', 'testcases1').\
-                filter(project_id=project_id)
+            interfaces_obj = Interfaces.objects.values('id').annotate(testcases=Count('testcases')).filter(project_id=project_id)
             #当前项目的接口数
             item["interfaces"]=len(interfaces_obj)
             testcases=0
             for i in interfaces_obj:
-                testcases += i['testcases1']
+                testcases += i['testcases']
             #当前项目的用例总数
             item["testcases"] = testcases
             testsuits =Testsuits.objects.filter(project_id=project_id).count()
             #当前项目的套件总数
             item["testsuits"] = testsuits
-            interfaces_configures = Interfaces.objects.annotate(configures1=Count('configures')).values('configures1'). \
-                filter(project_id=project_id)
+            interfaces_configures = Interfaces.objects.values('id').annotate(configures=Count('configures')).filter(project_id=project_id)
             configures=0
             for i in interfaces_configures:
-                configures += i['configures1']
+                configures += i['configures']
             #当前项目的配置总数
             item["configures"] = configures
         return response
