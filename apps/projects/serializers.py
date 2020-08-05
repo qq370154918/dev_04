@@ -32,11 +32,11 @@ class ProjectsModelSerializer(serializers.ModelSerializer):
 
         }
 
-        def create(self, validated_data):
-            # 在创建项目时，同时创建一个空的debugtalk.py文件
-            project = super().create(validated_data)
-            DebugTalks.objects.create(project=project)
-            return project
+    def create(self, validated_data):
+        # 在创建项目时，同时创建一个空的debugtalk.py文件
+        project = super().create(validated_data)
+        DebugTalks.objects.create(project=project)
+        return project
 
 
 class ProjectsNamesModelSerializer(serializers.ModelSerializer):
