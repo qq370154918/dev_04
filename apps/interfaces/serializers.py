@@ -5,6 +5,7 @@ from rest_framework import validators
 
 from interfaces.models import Interfaces
 from projects.models import Projects
+from configures.models import Configures
 
 from utils import common
 # from projects.serializers import ProjectsModelSerializer
@@ -24,7 +25,8 @@ class InterfacesModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interfaces
         # fields = ('id', 'name', 'leader', 'tester', 'programmer', 'create_time', 'update_time', 'email')
-        fields = '__all__'
+        # fields = '__all__'
+        exclude=("update_time",)
 
         extra_kwargs = {
             'create_time': {
@@ -37,4 +39,16 @@ class InterfacesModelSerializer(serializers.ModelSerializer):
         validated_data["project_id"]=projects.id
         return super().create(validated_data)
 
+class ConfiguresNamesModelSerializer(serializers.ModelSerializer):
 
+    class Meta:
+        model = Configures
+        fields = ('id', 'name',)
+        # fields = "__all__"
+
+class InterfacesByConfigureIdModelSerializer(serializers.ModelSerializer):
+    interfaces = ConfiguresNamesModelSerializer(many=True, read_only=True)
+
+    class Meta:
+        model =  Interfaces
+        fields = ('interfaces', )
