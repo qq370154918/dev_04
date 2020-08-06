@@ -14,7 +14,7 @@ from utils import common
 # 使用模型序列化器类：简化序列化器类中字段的创建
 class InterfacesModelSerializer(serializers.ModelSerializer):
     # a.会将父表的主键id值作为返回值
-    project_id = serializers.PrimaryKeyRelatedField(help_text='所属项目', label='所属项目', queryset=Projects.objects.all(),write_only=True)
+    project_id = serializers.PrimaryKeyRelatedField(help_text='所属项目', label='所属项目', queryset=Projects.objects.all())
     # b.会将父表对应对象的__str__方法的结果返回
     # projects = serializers.StringRelatedField()
     # c.会将父表对应对象的某个字段的值返回
@@ -46,9 +46,9 @@ class ConfiguresNamesModelSerializer(serializers.ModelSerializer):
         fields = ('id', 'name',)
         # fields = "__all__"
 
-class InterfacesByConfigureIdModelSerializer(serializers.ModelSerializer):
-    interfaces = ConfiguresNamesModelSerializer(many=True, read_only=True)
+class ConfiguresByInterfacesIdModelSerializer(serializers.ModelSerializer):
+    configures = ConfiguresNamesModelSerializer(label='接口所属配置id和name',many=True, read_only=True)
 
     class Meta:
         model =  Interfaces
-        fields = ('interfaces', )
+        fields = ('configures', )

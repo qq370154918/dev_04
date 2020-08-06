@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 
 from .models import Interfaces
-from .serializers import InterfacesModelSerializer,InterfacesByConfigureIdModelSerializer
+from .serializers import InterfacesModelSerializer,ConfiguresByInterfacesIdModelSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
@@ -39,6 +39,7 @@ class InterfacesViewSet(viewsets.ModelViewSet):
             item["configures"] = configures
         return response
 
+
     # @action(detail=True)
     # def project(self,request,*args,**kwargs):
     #     project=self.get_object()
@@ -47,12 +48,12 @@ class InterfacesViewSet(viewsets.ModelViewSet):
 
     @action(detail=True)
     def configs(self,request,*args,**kwargs):
-        interface_obj=self.get_object()
-        serializer_obj = self.get_serializer(instance=interface_obj)
-        return Response(serializer_obj.data)
+        configures_obj=self.get_object()
+        serializer_obj = self.get_serializer(instance=configures_obj)
+        return Response(serializer_obj.data["configures"])
 
     def get_serializer_class(self):
-        if self.action == 'project':
-            return InterfacesByConfigureIdModelSerializer
+        if self.action == 'configs':
+            return ConfiguresByInterfacesIdModelSerializer
         else:
             return self.serializer_class

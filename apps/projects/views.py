@@ -44,6 +44,8 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectsModelSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering = ['id']
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         results = response.data['results']
