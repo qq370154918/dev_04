@@ -44,8 +44,6 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectsModelSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
-    ordering = ['id']
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         results = response.data['results']
@@ -85,15 +83,15 @@ class ProjectsViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=False)
     def names(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(detail=True)
     def interfaces(self, request, *args, **kwargs):
-        interfaces = self.get_object()
-        serializer_obj = self.get_serializer(instance=interfaces)
-        return Response(serializer_obj.data)
+        response = self.retrieve(request, *args, **kwargs)
+        response.data = response.data['interfaces']
+        return Response
 
     def get_serializer_class(self):
         if self.action == 'names':

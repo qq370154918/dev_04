@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 
 from .models import Interfaces
-from .serializers import InterfacesModelSerializer,ConfiguresByInterfacesIdModelSerializer
+from .serializers import InterfacesModelSerializer,ConfiguresByInterfacesIdModelSerializer,TestcasesByInterfaceIdModelSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
@@ -45,14 +45,33 @@ class InterfacesViewSet(viewsets.ModelViewSet):
     #     project=self.get_object()
     #     serializer_obj = self.get_serializer(instance=project)
     #     return Response(serializer_obj.data)
+    @action(methods=['get'], detail=True)
+    def testcases(self, request, *args, **kwargs):
+        """
+        Returns a list of all the testcases names by interface id
+        """
+        # testcase_objs = Testcases.objects.filter(interface_id=pk)
+        # one_list = []
+        # for obj in testcase_objs:
+        #     one_list.append({
+        #         'id': obj.id,
+        #         'name': obj.name
+        #     })
+        # return Response(data=one_list)
 
-    @action(detail=True)
-    def configs(self,request,*args,**kwargs):
-        configures_obj=self.get_object()
-        serializer_obj = self.get_serializer(instance=configures_obj)
-        return Response(serializer_obj.data["configures"])
+        response = self.retrieve(request, *args, **kwargs)
+        response.data = response.data['testcases']
+        return response
+
+    @action(methods=['get'], detail=True)
+    def configures(self, request, *args, **kwargs):
+        response = self.retrieve(request, *args, **kwargs)
+        response.data = response.data['configures']
+        return response
 
     def get_serializer_class(self):
+        if self.action == "testcases":
+            return TestcasesByInterfaceIdModelSerializer
         if self.action == 'configs':
             return ConfiguresByInterfacesIdModelSerializer
         else:

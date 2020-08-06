@@ -14,8 +14,7 @@ class InterfacesNamesModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Interfaces
-        # fields = ('id', 'name',)
-        fields = "__all__"
+        fields = ('id', 'name')
 
 
 class ProjectsModelSerializer(serializers.ModelSerializer):

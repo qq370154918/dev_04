@@ -6,6 +6,7 @@ from rest_framework import validators
 from interfaces.models import Interfaces
 from projects.models import Projects
 from configures.models import Configures
+from testcases.models import Testcases
 
 from utils import common
 # from projects.serializers import ProjectsModelSerializer
@@ -35,9 +36,16 @@ class InterfacesModelSerializer(serializers.ModelSerializer):
             },
         }
     def create(self, validated_data):
-        projects=validated_data.pop('project_id')
-        validated_data["project_id"]=projects.id
+        project=validated_data.pop('project_id')
+        validated_data["project_id"]=project.id
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        if 'project_id' in validated_data:
+            project = validated_data.pop('project_id')
+            validated_data['project'] = project.id
+
+        return super().update(instance, validated_data)
 
 class ConfiguresNamesModelSerializer(serializers.ModelSerializer):
 
@@ -52,3 +60,16 @@ class ConfiguresByInterfacesIdModelSerializer(serializers.ModelSerializer):
     class Meta:
         model =  Interfaces
         fields = ('configures', )
+
+class TestcasesNamesModelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Testcases
+        fields = ('id', 'name')
+
+class TestcasesByInterfaceIdModelSerializer(serializers.ModelSerializer):
+    testcases = TestcasesNamesModelSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Interfaces
+        fields = ('testcases', )

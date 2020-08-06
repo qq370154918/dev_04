@@ -11,6 +11,16 @@ from utils import common
 class DebugTalksModelSerializer(serializers.ModelSerializer):
     project = serializers.SlugRelatedField(slug_field='name', read_only=True)
     class Meta:
+        # model = DebugTalks
+        # exclude=("update_time","create_time","debugtalk")
         model = DebugTalks
-        exclude=("update_time","create_time","debugtalk")
+        exclude = ('create_time', 'update_time')
+        read_only_fields = ('name', 'project')
+
+        extra_kwargs = {
+            'debugtalk': {
+                'write_only': True
+            }
+        }
+
 

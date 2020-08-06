@@ -13,10 +13,9 @@ import logging
 logger = logging.getLogger('mytest')
 class DebugTalksViewSet(mixins.RetrieveModelMixin,
                         mixins.UpdateModelMixin,
-                        mixins.DestroyModelMixin,
                         mixins.ListModelMixin,
                         viewsets.GenericViewSet):
     queryset = DebugTalks.objects.all()
     serializer_class = DebugTalksModelSerializer
     pagination_class = MyPagination
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
+
