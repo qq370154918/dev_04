@@ -1,7 +1,7 @@
 
 from .serializers import EnvsModelSerializer,EnvsNameModelSerializer
-
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
 from utils.pagination import MyPagination
 from rest_framework import viewsets
@@ -21,7 +21,11 @@ class EnvsViewSet(viewsets.ModelViewSet):
 
     @action(detail=False)
     def names(self,request,*args,**kwargs):
-        return super().list(request,*args,**kwargs)
+        # qs = self.get_queryset()
+        # serializer = self.get_serializer(qs, many=True)
+        # return Response(serializer.data)
+        response=super().list(request,*args,**kwargs)
+        return Response(response.data["results"])
 
     def get_serializer_class(self):
         if self.action == 'names':
