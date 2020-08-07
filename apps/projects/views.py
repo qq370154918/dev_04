@@ -91,7 +91,7 @@ class ProjectsViewSet(viewsets.ModelViewSet):
     def interfaces(self, request, *args, **kwargs):
         response = self.retrieve(request, *args, **kwargs)
         response.data = response.data['interfaces']
-        return Response
+        return Response(response.data)
 
     def get_serializer_class(self):
         if self.action == 'names':

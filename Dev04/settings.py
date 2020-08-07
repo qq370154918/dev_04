@@ -198,6 +198,14 @@ REST_FRAMEWORK = {
     # 指定用于支持coreapi的Schema
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 
+    # # 限流设置
+    # 'DEFAULT_THROTTLE_CLASSES': [
+    #     'rest_framework.throttling.AnonRateThrottle',
+    # ],
+    # # 设置访问频率为每分钟10次
+    # 'DEFAULT_THROTTLE_RATES': {
+    #     'anon': '10/min',
+    # },
     # DEFAULT_AUTHENTICATION_CLASSES指定默认的认证类（认证方式）
     'DEFAULT_AUTHENTICATION_CLASSES': [
         # 指定使用JWT token认证方式

@@ -7,6 +7,7 @@ from utils.pagination import MyPagination
 from rest_framework import viewsets
 from .models import DebugTalks
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
 import logging
 # 定义日志器用于记录日志，logging.getLogger('全局配置settings.py中定义的日志器名')
@@ -19,3 +20,10 @@ class DebugTalksViewSet(mixins.RetrieveModelMixin,
     serializer_class = DebugTalksModelSerializer
     pagination_class = MyPagination
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        data_dict = {
+            "id": instance.id,
+            "debugtalk": instance.debugtalk
+        }
+        return Response(data_dict)
