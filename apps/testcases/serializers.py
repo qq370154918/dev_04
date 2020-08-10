@@ -56,27 +56,3 @@ class TestcasesModelSerializer(serializers.ModelSerializer):
         validated_data['interface_id'] = iid
         return super().update(instance, validated_data)
 
-
-'''
-class ProjectsNamesModelSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Projects
-        fields = ('id', 'name')
-
-
-class InterfacesByProjectIdModelSerializer(serializers.ModelSerializer):
-    interfaces = InterfacesNamesModelSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Projects
-        fields = ('interfaces', )
-
-
-class InterfacesByProjectIdModelSerializer1(serializers.ModelSerializer):
-    # interfaces = InterfacesNamesModelSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Interfaces
-        fields = ('id', 'name')
-'''
