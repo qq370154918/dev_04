@@ -27,7 +27,7 @@ class InterfacesProjectsModelSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         pid = attrs.get('pid')
         iid = attrs.get('iid')
-        if not Interfaces.objects.filter(id=iid,project_id=pid).exist():
+        if not Interfaces.objects.filter(id=iid,project_id=pid).exists():
             raise serializers.ValidationError('所属项目id与接口id不匹配')
 
 
