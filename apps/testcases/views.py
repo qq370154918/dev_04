@@ -16,7 +16,8 @@ from interfaces.models import Interfaces
 
 from .serializers import TestcasesModelSerializer
 from .utils import handel_request_data
-from .utils import handel_test_data,handel_test_data_validate,handel_test_data_variables,handel_test_data_hooks
+from .utils import handel_test_data, handel_test_data_validate, handel_test_data_variables, handel_test_data_hooks
+
 # from utils.pagination import MyPagination
 # 定义日志器用于记录日志，logging.getLogger('全局配置settings.py中定义的日志器名')
 logger = logging.getLogger('mytest')
@@ -43,14 +44,14 @@ class TestcasesViewSet(viewsets.ModelViewSet):
     serializer_class = TestcasesModelSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-
     def retrieve(self, request, *args, **kwargs):
+        # 获取当前用例的模型类对象
         testcase_obj = self.get_object()
-        # 用例所属项目id
+        # 获取用例所属项目id
         selected_project_id = Interfaces.objects.get(id=testcase_obj.interface_id).project_id
 
-        #获取include内数据
-        include=json.loads(testcase_obj.include)
+        # 获取include内数据
+        include = json.loads(testcase_obj.include)
         selected_configure_id = include.get('config')
         selected_testcase_id = include.get('testcases')
 
@@ -79,16 +80,16 @@ class TestcasesViewSet(viewsets.ModelViewSet):
 
             "method": method,
             "url": url,
-            "param": handel_request_data(test_request_data,'params'),
-            "header": handel_request_data(test_request_data,'headers'),
-            "variable": handel_request_data(test_request_data,'data'),  # form表单请求数据
+            "param": handel_request_data(test_request_data, 'params'),
+            "header": handel_request_data(test_request_data, 'headers'),
+            "variable": handel_request_data(test_request_data, 'data'),  # form表单请求数据
             "jsonVariable": jsonVariable,
-            "extract": handel_test_data(test_data,'extract'),
-            "validate": handel_test_data_validate(test_data,'validate'),
-            "globalVar": handel_test_data_variables(test_data,'variables'),  # 变量
-            "parameterized": handel_test_data(test_data,'parameters'),
-            "setupHooks": handel_test_data_hooks(test_data,'setupHooks'),
-            "teardownHooks": handel_test_data_hooks(test_data,'teardownHooks'),
+            "extract": handel_test_data(test_data, 'extract'),
+            "validate": handel_test_data_validate(test_data, 'validate'),
+            "globalVar": handel_test_data_variables(test_data, 'variables'),  # 变量
+            "parameterized": handel_test_data(test_data, 'parameters'),
+            "setupHooks": handel_test_data_hooks(test_data, 'setupHooks'),
+            "teardownHooks": handel_test_data_hooks(test_data, 'teardownHooks'),
         }
         print(datas)
         return Response(datas)
