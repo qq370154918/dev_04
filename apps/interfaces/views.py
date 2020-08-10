@@ -64,7 +64,7 @@ class InterfacesViewSet(viewsets.ModelViewSet):
         return response
 
     @action(methods=['get'], detail=True)
-    def configures(self, request, *args, **kwargs):
+    def configs(self, request, *args, **kwargs):
         response = self.retrieve(request, *args, **kwargs)
         response.data = response.data['configures']
         return response
