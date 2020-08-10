@@ -31,7 +31,6 @@ class InterfacesProjectsModelSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('所属项目id与接口id不匹配')
 
 
-
 class TestcasesModelSerializer(serializers.ModelSerializer):
     interface = InterfacesProjectsModelSerializer(label="所属项目及接口信息",help_text="所属项目及接口信息")
     class Meta:
