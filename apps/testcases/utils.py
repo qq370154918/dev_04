@@ -47,14 +47,19 @@ def handel_test_data_variables(test_data,key):
     if key in test_data.keys():
         data = test_data.get(key)  # 列表
         for item in data:
-            if isinstance(item[list(item)[0]], int):
-                type = "int"
-            elif isinstance(item[list(item)[0]], str):
-                type = "string"
+            my_type=type(item[list(item)[0]]).__name__
+            if my_type=="int":
+                param_type = "int"
+            elif my_type=="str":
+                param_type = "string"
+            elif my_type=="float":
+                param_type = "float"
+            elif my_type=="bool":
+                param_type = "bool"
             data_list.append({
                 "key": list(item)[0],
                 "value": item[list(item)[0]],
-                "param_type": type
+                "param_type": param_type
             })
     "如果数据中没有，直接返回空列表"
     return data_list
@@ -71,15 +76,20 @@ def handel_test_data_validate(test_data,key):
     if key in test_data.keys():
         data = test_data.get(key)  # 列表
         for item in data:
-            if isinstance(item["expected"], int):
-                type = "int"
-            elif isinstance(item["expected"], str):
-                type = "string"
+            my_type = type(item["expected"]).__name__
+            if my_type == "int":
+                param_type = "int"
+            elif my_type == "str":
+                param_type = "string"
+            elif my_type == "float":
+                param_type = "float"
+            elif my_type == "bool":
+                param_type = "bool"
 
             data_list.append({
                 "key": item["check"],
                 "value": item["expected"],
-                "param_type": type,
+                "param_type": my_type,
                 "comparator":item["comparator"],
             })
     "如果数据中没有，直接返回空列表"

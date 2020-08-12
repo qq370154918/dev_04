@@ -1,23 +1,14 @@
 import json
 import logging
 
-from django_filters.rest_framework import DjangoFilterBackend
-from django.db.models import Count
-
-# from rest_framework import filters
-from rest_framework.filters import OrderingFilter
 from rest_framework import viewsets
-from rest_framework.decorators import action
 from rest_framework import permissions
 from rest_framework.response import Response
-from rest_framework import status
 
 from .models import Testcases
 from interfaces.models import Interfaces
-
 from .serializers import TestcasesModelSerializer
-from .utils import handel_request_data
-from .utils import handel_test_data, handel_test_data_validate, handel_test_data_variables, handel_test_data_hooks
+from .utils import handel_request_data,handel_test_data, handel_test_data_validate, handel_test_data_variables, handel_test_data_hooks
 
 # from utils.pagination import MyPagination
 # 定义日志器用于记录日志，logging.getLogger('全局配置settings.py中定义的日志器名')
@@ -53,12 +44,12 @@ class TestcasesViewSet(viewsets.ModelViewSet):
         selected_project_id = Interfaces.objects.get(id=testcase_obj.interface_id).project_id
 
         # 获取include内数据
-        include = json.loads(testcase_obj.include)
+        include = json.loads(testcase_obj.include,encoding='utf-8')
         selected_configure_id = include.get('config')
         selected_testcase_id = include.get('testcases')
 
         # 获取数据库request字段内容(test下)
-        test_data = json.loads(testcase_obj.request).get('test')
+        test_data = json.loads(testcase_obj.request,encoding='utf-8').get('test')
         print(test_data)
         test_request_data = test_data.get('request')
 
@@ -67,7 +58,7 @@ class TestcasesViewSet(viewsets.ModelViewSet):
         # 参数格式 json、data、param
         if 'json' in test_request_data.keys():
             # jsonVariable = json.dumps(test_request_data.get('json'))
-            jsonVariable = test_request_data.get('json')
+            jsonVariable = str(test_request_data.get('json'))
 
         else:
             jsonVariable = 'null'

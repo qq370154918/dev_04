@@ -49,4 +49,5 @@ urlpatterns = [
     path('', include('testsuits.urls')),
     path('', include('reports.urls')),
     path('', include('testcases.urls')),
+    path('', include('configures.urls')),
 ]
