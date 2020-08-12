@@ -10,6 +10,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework import permissions
 from rest_framework.response import Response
+from rest_framework import status
 
 from .models import Testcases
 from interfaces.models import Interfaces
@@ -43,6 +44,7 @@ class TestcasesViewSet(viewsets.ModelViewSet):
     queryset = Testcases.objects.all()
     serializer_class = TestcasesModelSerializer
     permission_classes = [permissions.IsAuthenticated]
+
 
     def retrieve(self, request, *args, **kwargs):
         # 获取当前用例的模型类对象
