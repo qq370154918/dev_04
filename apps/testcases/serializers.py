@@ -57,3 +57,9 @@ class TestcasesModelSerializer(serializers.ModelSerializer):
         validated_data['interface_id'] = iid
         return super().update(instance, validated_data)
 
+class TestcasesRunModelSerializer(serializers.ModelSerializer):
+    env_id = serializers.IntegerField(label='环境变量ID', help_text='环境变量ID',
+                                      write_only=True, validators=[validates.is_exist_env_id])
+    class Meta:
+        model = Testcases
+        fields = ('id', 'env_id')

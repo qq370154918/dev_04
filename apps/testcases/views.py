@@ -2,18 +2,17 @@ import json
 import logging
 
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework import permissions
 from rest_framework.response import Response
 
 from .models import Testcases
 from interfaces.models import Interfaces
-from .serializers import TestcasesModelSerializer
+from .serializers import TestcasesModelSerializer,TestcasesRunModelSerializer
 from .utils import handel_request_data,handel_test_data, handel_test_data_validate, handel_test_data_variables, handel_test_data_hooks
 
-# from utils.pagination import MyPagination
 # 定义日志器用于记录日志，logging.getLogger('全局配置settings.py中定义的日志器名')
 logger = logging.getLogger('mytest')
-
 
 class TestcasesViewSet(viewsets.ModelViewSet):
     """
@@ -87,24 +86,29 @@ class TestcasesViewSet(viewsets.ModelViewSet):
         print(datas)
         return Response(datas)
 
-    '''
-    @action(methods=['get'], detail=False)
-    def names(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
 
+    @action(methods=['post'], detail=True)
+    def run(self, request, *args, **kwargs):
+        # 获取testcase对象
+        instance=self.get_object()
+        response=super().create(request, *args, **kwargs)
+        env_id=response.data.serializer.validated_data.get('env_id')
+        print(response)
+        return Response('sss')
+
+    '''
     @action(detail=True)
     def interfaces(self, request, *args, **kwargs):
         response = self.retrieve(request, *args, **kwargs)
         response.data = response.data['interfaces']
         return Response(response.data)
-
-    def get_serializer_class(self):
-        if self.action == 'names':
-            return ProjectsNamesModelSerializer
-        elif self.action == 'interfaces':
-            return InterfacesByProjectIdModelSerializer
-        else:
-            return self.serializer_class
     '''
+    def get_serializer_class(self):
+        return TestcasesRunModelSerializer if self.action == 'run' else self.serializer_class
+
+    def perform_create(self,serializer):
+        # 重写父类的perform_create方法，如果sction为run，则不调用save
+        if self.action == 'run':
+            pass
+        else:
+            serializer.save()

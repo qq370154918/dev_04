@@ -12,7 +12,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 from .models import Reports
 from .serializers import ReportsModelSerializer
-from django.conf import settings
+from django.conf import settings  #
 from django.http.response import StreamingHttpResponse
 from .utils import get_file_content
 from django.utils.encoding import escape_uri_path
