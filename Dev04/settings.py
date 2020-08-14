@@ -302,3 +302,9 @@ JWT_AUTH = {
     # 指定前端传递token值的前缀
     # 'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
+
+
+# 在全局配置文件settings.py文件中定义变量，变量名要大写
+# django.conf.setting
+REPORT_DIR = os.path.join(BASE_DIR, 'reports')
+SUITES_DIR = os.path.join(BASE_DIR, 'suites')

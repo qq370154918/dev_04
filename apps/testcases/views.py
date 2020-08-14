@@ -1,12 +1,17 @@
 import json
-import logging
+import os
+from datetime import datetime
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework import permissions
 from rest_framework.response import Response
+from django.conf import settings
 
+import logging
+from utils import common
 from .models import Testcases
+from envs.models import Envs
 from interfaces.models import Interfaces
 from .serializers import TestcasesModelSerializer,TestcasesRunModelSerializer
 from .utils import handel_request_data,handel_test_data, handel_test_data_validate, handel_test_data_variables, handel_test_data_hooks
@@ -93,6 +98,10 @@ class TestcasesViewSet(viewsets.ModelViewSet):
         instance=self.get_object()
         response=super().create(request, *args, **kwargs)
         env_id=response.data.serializer.validated_data.get('env_id')
+        testcase_dir_path = os.path.join(settings.SUITES_DIR, datetime.strftime(datetime.now(), '%Y%m%d%H%M%S%f'))
+        env = Envs.objects.filter(id=env_id).first()
+        # 生成yaml用例文件
+        common.generate_testcase_file(instance, env, testcase_dir_path)
         print(response)
         return Response('sss')
 
@@ -107,7 +116,7 @@ class TestcasesViewSet(viewsets.ModelViewSet):
         return TestcasesRunModelSerializer if self.action == 'run' else self.serializer_class
 
     def perform_create(self,serializer):
-        # 重写父类的perform_create方法，如果sction为run，则不调用save
+        # 重写父类的perform_create方法，如果sction为run，则不调用save(仅为了调用父类的create方法进行入参校验)
         if self.action == 'run':
             pass
         else:
