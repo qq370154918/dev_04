@@ -98,12 +98,18 @@ class TestcasesViewSet(viewsets.ModelViewSet):
         instance=self.get_object()
         response=super().create(request, *args, **kwargs)
         env_id=response.data.serializer.validated_data.get('env_id')
+
+        # 构造一个以时间戳命名的文件路径
         testcase_dir_path = os.path.join(settings.SUITES_DIR, datetime.strftime(datetime.now(), '%Y%m%d%H%M%S%f'))
+        # 创建目录
+        os.mkdir(testcase_dir_path)
+
         env = Envs.objects.filter(id=env_id).first()
         # 生成yaml用例文件
         common.generate_testcase_file(instance, env, testcase_dir_path)
-        print(response)
-        return Response('sss')
+
+        # 运行用例（生成报告）
+        return common.run_testcase(instance, testcase_dir_path)
 
     '''
     @action(detail=True)
@@ -116,7 +122,7 @@ class TestcasesViewSet(viewsets.ModelViewSet):
         return TestcasesRunModelSerializer if self.action == 'run' else self.serializer_class
 
     def perform_create(self,serializer):
-        # 重写父类的perform_create方法，如果sction为run，则不调用save(仅为了调用父类的create方法进行入参校验)
+        # 重写父类的perform_create方法，如果action为run，则不调用save(仅为了调用父类的create方法进行入参校验)
         if self.action == 'run':
             pass
         else:
