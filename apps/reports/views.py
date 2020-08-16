@@ -1,4 +1,3 @@
-
 import logging,json,os
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Count
@@ -18,6 +17,7 @@ from .utils import get_file_content
 from django.utils.encoding import escape_uri_path
 
 logger = logging.getLogger('mytest')
+
 class ReportsViewSet(mixins.RetrieveModelMixin,
                         mixins.ListModelMixin,
                         mixins.DestroyModelMixin,
