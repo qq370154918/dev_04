@@ -8,7 +8,7 @@ from projects.models import Projects
 from configures.models import Configures
 from testcases.models import Testcases
 
-from utils import common
+from utils import common,validates
 # from projects.serializers import ProjectsModelSerializer
 
 
@@ -72,3 +72,10 @@ class TestcasesByInterfaceIdModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interfaces
         fields = ('testcases', )
+
+class InterfaceRunModelSerializer(serializers.ModelSerializer):
+    env_id = serializers.IntegerField(label='环境变量ID', help_text='环境变量ID',
+                                      write_only=True, validators=[validates.is_exist_env_id])
+    class Meta:
+        model = Interfaces
+        fields = ('id', 'env_id')

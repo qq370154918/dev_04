@@ -1,16 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
--------------------------------------------------
-  @Time : 2020/7/22 20:55 
-  @Auth : 可优
-  @File : test_jwt.py
-  @IDE  : PyCharm
-  @Motto: ABC(Always Be Coding)
-  @Email: keyou100@qq.com
-  @Company: 湖南省零檬信息技术有限公司
-  @Copyright: 柠檬班
--------------------------------------------------
-"""
+
 import jwt
 
 # 第一部分的header，一般不需要指定，有默认值

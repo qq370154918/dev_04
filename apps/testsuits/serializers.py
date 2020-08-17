@@ -7,6 +7,7 @@ from .models import Testsuits
 from projects.models import Projects
 from utils.common import datetime_fmt
 from interfaces.models import Interfaces
+from utils import validates
 
 
 def validate_include(value):
@@ -73,3 +74,10 @@ class TestsuitsDetailModelSerializer(TestsuitsModelSerializer):
                 'write_only': False,
             }
         }
+
+class TestsuitRunModelSerializer(serializers.ModelSerializer):
+    env_id = serializers.IntegerField(label='环境变量ID', help_text='环境变量ID',
+                                      write_only=True, validators=[validates.is_exist_env_id])
+    class Meta:
+        model = Testsuits
+        fields = ('id', 'env_id')

@@ -1,9 +1,12 @@
 import json
 import logging
+import os
+from datetime import datetime
+from envs.models import Envs
+from django.conf import settings
 
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Count
-
 # from rest_framework import filters
 from rest_framework.filters import OrderingFilter
 from rest_framework import viewsets
@@ -14,9 +17,11 @@ from rest_framework.response import Response
 from .models import Projects
 from interfaces.models import Interfaces
 from testsuits.models import Testsuits
+from testcases.models import Testcases
+from utils import common
 
 from .serializers import ProjectsModelSerializer, ProjectsNamesModelSerializer, \
-    InterfacesByProjectIdModelSerializer, InterfacesByProjectIdModelSerializer1
+    InterfacesByProjectIdModelSerializer, ProjectRunModelSerializer
 
 # from utils.pagination import MyPagination
 # 定义日志器用于记录日志，logging.getLogger('全局配置settings.py中定义的日志器名')
@@ -93,10 +98,63 @@ class ProjectsViewSet(viewsets.ModelViewSet):
         response.data = response.data['interfaces']
         return Response(response.data)
 
+    @action(methods=['post'], detail=True)
+    def run(self, request, *args, **kwargs):
+        # 取出并构造参数
+        instance = self.get_object()
+        response = super().create(request, *args, **kwargs)
+        env_id = response.data.serializer.validated_data.get('env_id')
+        testcase_dir_path = os.path.join(settings.SUITES_DIR, datetime.strftime(datetime.now(), '%Y%m%d%H%M%S%f'))
+        # 创建一个以时间戳命名的路径
+        os.mkdir(testcase_dir_path)
+        env = Envs.objects.filter(id=env_id).first()
+
+        # 项目下的所有接口模型对象
+        interface_qs = Interfaces.objects.filter(project=instance)
+        # 如果接口模型对象不存在，说明项目下没有接口，也不会有用例
+        if not interface_qs.exists():
+            data = {
+                'ret': False,
+                'msg': '此项目下无接口，无法运行'
+            }
+            return Response(data, status=400)
+
+        # 定义一个需要执行的所有用例模型对象的的列表
+        runnable_testcase_obj = []
+        for interface_obj in interface_qs:
+            # 当前接口项目的用例所在查询集对象
+            testcase_qs = Testcases.objects.filter(interface=interface_obj)
+            if testcase_qs.exists():
+                # 将两个列表合并
+                runnable_testcase_obj.extend(list(testcase_qs))
+
+        if len(runnable_testcase_obj) == 0:
+            data = {
+                'ret': False,
+                'msg': '此项目下无用例，无法运行'
+            }
+            return Response(data, status=400)
+
+        # 遍历 用例模型对象的的列表，生成yaml用例文件
+        for testcase_obj in runnable_testcase_obj:
+            # 生成yaml用例文件
+            common.generate_testcase_file(testcase_obj, env, testcase_dir_path)
+
+        # 运行此次执行生成的时间戳目录下的所有的用例yaml文件并生成报告
+        return common.run_testcase(instance, testcase_dir_path)
+
     def get_serializer_class(self):
         if self.action == 'names':
             return ProjectsNamesModelSerializer
         elif self.action == 'interfaces':
             return InterfacesByProjectIdModelSerializer
+        elif self.action == 'run':
+            return ProjectRunModelSerializer
         else:
             return self.serializer_class
+
+    def perform_create(self, serializer):
+        if self.action == 'run':
+            pass
+        else:
+            serializer.save()
