@@ -138,6 +138,7 @@ def generate_testcase_file(instance, env, testcase_dir_path):
 
 
 def run_testcase(instance, testcase_dir_path):
+
     # 1、运行用例
     runner = HttpRunner()
     try:
@@ -154,6 +155,7 @@ def run_testcase(instance, testcase_dir_path):
         'id': report_id
     }
     return Response(data, status=201)
+
 
 if __name__ == '__main__':
     print(datetime_fmt())

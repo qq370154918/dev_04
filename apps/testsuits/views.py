@@ -46,7 +46,8 @@ class TestsuitsViewSet(viewsets.ModelViewSet):
         os.mkdir(testcase_dir_path)
         env = Envs.objects.filter(id=env_id).first()
 
-        # 获取include下的所有测试用例
+        # 获取include下的所有接口id
+        testsuit_interfaces = eval(instance.include)
         testsuit_testcase=eval(instance.include)
         # 如果include为空，说明套件下没有用例
         if not testsuit_testcase:
@@ -58,14 +59,16 @@ class TestsuitsViewSet(viewsets.ModelViewSet):
 
         # 定义需要执行的所有用例模型对象的的列表
         runnable_testcase_obj = []
-        for testcase_id in testsuit_testcase:
-            testcase_obj=Testcases.objects.filter(id=testcase_id).first()
-            runnable_testcase_obj.append(testcase_obj)
+        for interfaces_id in testsuit_interfaces:
+            testcase_qs=Testcases.objects.filter(interfaces_id=interfaces_id)
+            if testcase_qs.exists():
+                # 将两个列表合并
+                runnable_testcase_obj.extend(list(testcase_qs))
 
         if len(runnable_testcase_obj) == 0:
             data = {
                 'ret': False,
-                'msg': '此接口下无用例，无法运行'
+                'msg': '此套件下无用例，无法运行'
             }
             return Response(data, status=400)
 
