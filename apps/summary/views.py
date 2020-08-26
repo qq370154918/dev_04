@@ -40,9 +40,13 @@ class SummaryViewSet(APIView):
         total = Reports.objects.all().aggregate(total=Sum('count')).get('total')
         # 获取总的执行成功用例数
         success = Reports.objects.all().aggregate(success=Sum('success')).get('success')
-        # 计算成功率  round(success/float(total), 2) 浮点数计算保留两位小数
-        success_rate = int(round(success/float(total), 2)* 100)
-        fail_rate = 100 - success_rate
+        if total==0:
+            success_rate = 0
+            fail_rate = 0
+        else:
+            # 计算成功率  round(success/float(total), 2) 浮点数计算保留两位小数
+            success_rate = int(round(success/float(total), 2)* 100)
+            fail_rate = 100 - success_rate
 
         data['statistics']={
             "projects_count": projects_count,
