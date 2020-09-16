@@ -309,3 +309,4 @@ JWT_AUTH = {
 # django.conf.setting
 REPORT_DIR = os.path.join(BASE_DIR, 'reports')
 SUITES_DIR = os.path.join(BASE_DIR, 'suites')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')

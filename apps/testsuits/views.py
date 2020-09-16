@@ -40,6 +40,7 @@ class TestsuitsViewSet(viewsets.ModelViewSet):
         # 取出并构造参数
         instance = self.get_object()
         response = super().create(request, *args, **kwargs)
+        # 获取env_id
         env_id = response.data.serializer.validated_data.get('env_id')
         testcase_dir_path = os.path.join(settings.SUITES_DIR, datetime.strftime(datetime.now(), '%Y%m%d%H%M%S%f'))
         # 创建一个以时间戳命名的路径
@@ -60,7 +61,7 @@ class TestsuitsViewSet(viewsets.ModelViewSet):
         # 定义需要执行的所有用例模型对象的的列表
         runnable_testcase_obj = []
         for interfaces_id in testsuit_interfaces:
-            testcase_qs=Testcases.objects.filter(interfaces_id=interfaces_id)
+            testcase_qs=Testcases.objects.filter(interface_id=interfaces_id)
             if testcase_qs.exists():
                 # 将两个列表合并
                 runnable_testcase_obj.extend(list(testcase_qs))
