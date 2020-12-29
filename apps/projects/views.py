@@ -44,6 +44,24 @@ class ProjectsViewSet(viewsets.ModelViewSet):
 
     interfaces:
     获取某个项目下的接口名称
+
+    run:
+    执行项目下的用例
+
+    read:
+    查看项目详情
+
+    update:
+    更新项目信息
+
+    partial_update:
+    部分更新项目信息
+
+    delete:
+    删除项目
+
+    interfaces:
+    获取项目下的接口列表
     """
     queryset = Projects.objects.all()
     serializer_class = ProjectsModelSerializer

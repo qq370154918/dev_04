@@ -22,6 +22,20 @@ class ReportsViewSet(mixins.RetrieveModelMixin,
                         mixins.ListModelMixin,
                         mixins.DestroyModelMixin,
                         GenericViewSet):
+    """
+    list:
+    获取测试报告的列表信息
+
+    read:
+    获取测试报告详情数据
+
+    delete:
+    删除报告
+
+    download:
+    下载测试报告
+    """
+
     queryset = Reports.objects.all()
     serializer_class = ReportsModelSerializer
     # pagination_class = MyPagination

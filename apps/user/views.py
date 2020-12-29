@@ -8,6 +8,10 @@ from .serializers import RegisterSerializer
 
 
 class UserView(CreateAPIView):
+    """
+    注册
+    """
+
     serializer_class = RegisterSerializer
 
     # def post(self, request, *args, **kwargs):
@@ -19,7 +23,10 @@ class UserView(CreateAPIView):
 
 
 class UsernameIsExistedView(APIView):
-
+    """
+    get:
+    获取指定用户名数据库已存在个数
+    """
     def get(self, request, username):
         count = User.objects.filter(username=username).count()
         # count = user.count()
@@ -32,6 +39,10 @@ class UsernameIsExistedView(APIView):
 
 
 class EmailIsExistedView(APIView):
+    """
+    get:
+    获取指定邮箱数据库已存在个数
+    """
 
     def get(self, request, email):
         count = User.objects.filter(email=email).count()

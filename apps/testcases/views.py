@@ -22,75 +22,30 @@ logger = logging.getLogger('mytest')
 class TestcasesViewSet(viewsets.ModelViewSet):
     """
     list:
-    获取项目的列表信息
-
-    retrive:
-    获取项目详情数据
+    获取用例的列表信息
 
     create:
-    创建项目
+    创建用例
 
-    names:
-    获取项目名称
+    read:
+    获取用例详情
 
-    interfaces:
-    获取某个项目下的接口名称
+    update:
+    更新用例信息
+
+    partial_update:
+    部分更新用例信息
+
+    delete:
+    删除用例
+
+    run:
+    执行用例
     """
     queryset = Testcases.objects.all()
     serializer_class = TestcasesModelSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    '''
-    def retrieve(self, request, *args, **kwargs):
-        # 获取当前用例的模型类对象
-        testcase_obj = self.get_object()
-        # 获取用例所属项目id
-        selected_project_id = Interfaces.objects.get(id=testcase_obj.interface_id).project_id
-
-        # 获取include内数据
-        include = json.loads(testcase_obj.include,encoding='utf-8')
-        selected_configure_id = include.get('config')
-        selected_testcase_id = include.get('testcases')
-
-        # 获取数据库request字段内容(test下)
-        test_data = json.loads(testcase_obj.request,encoding='utf-8').get('test')
-        print(test_data)
-        test_request_data = test_data.get('request')
-
-        method = test_request_data.get('method')
-        url = test_request_data.get('url')
-        # 参数格式 json、data、param
-        if 'json' in test_request_data.keys():
-            # jsonVariable = json.dumps(test_request_data.get('json'))
-            jsonVariable = str(test_request_data.get('json'))
-
-        else:
-            jsonVariable = 'null'
-
-        datas = {
-            "author": testcase_obj.author,
-            "testcase_name": testcase_obj.name,
-            "selected_configure_id": selected_configure_id,
-            "selected_interface_id": testcase_obj.interface_id,
-            "selected_project_id": selected_project_id,
-            "selected_testcase_id": selected_testcase_id,
-
-            "method": method,
-            "url": url,
-            "param": handel_request_data(test_request_data, 'params'),
-            "header": handel_request_data(test_request_data, 'headers'),
-            "variable": handel_request_data(test_request_data, 'data'),  # form表单请求数据
-            "jsonVariable": jsonVariable,
-            "extract": handel_test_data(test_data, 'extract'),
-            "validate": handel_test_data_validate(test_data, 'validate'),
-            "globalVar": handel_test_data_variables(test_data, 'variables'),  # 变量
-            "parameterized": handel_test_data(test_data, 'parameters'),
-            "setupHooks": handel_test_data_hooks(test_data, 'setupHooks'),
-            "teardownHooks": handel_test_data_hooks(test_data, 'teardownHooks'),
-        }
-        print(datas)
-        return Response(datas)
-    '''
     def retrieve(self, request, *args, **kwargs):
         """获取用例详情信息"""
         # Testcase对象

@@ -22,6 +22,37 @@ import logging
 # 定义日志器用于记录日志，logging.getLogger('全局配置settings.py中定义的日志器名')
 logger = logging.getLogger('mytest')
 class InterfacesViewSet(viewsets.ModelViewSet):
+    """
+        list:
+        获取接口列表信息
+
+        retrive:
+        获取项目详情数据
+
+        create:
+        创建接口
+
+        read:
+        查看接口详情
+
+        update:
+        更新接口信息
+
+        partial_update:
+        部分更新接口信息
+
+        delete:
+        删除接口
+
+        configs：
+        获取接口配置
+
+        testcases:
+        获取某个接口下的用例
+
+        run:
+        执行接口下的用例
+    """
     queryset = Interfaces.objects.all()
     serializer_class = InterfacesModelSerializer
     pagination_class = MyPagination

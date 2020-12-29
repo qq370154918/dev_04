@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'drf_yasg',
-
     # 子应用名.apps.子应用名首字母大写Config
     # 'projects.apps.ProjectsConfig',
     'projects',
@@ -131,6 +130,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         # 指定数据库的名称
         'NAME': 'dev04_dj',
+        # 'NAME': 'dev04',
         # 指定连接的数据库主机地址，域名和ip都可以
         'HOST' : '47.107.186.205',
         # 'HOST' : 'localhost',
